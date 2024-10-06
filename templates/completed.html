@@ -8,14 +8,10 @@
             <div class="list-group-item d-flex flex-row overflow-scroll">
                 <form action="/complete/{{loop.index0}}" method="post" class="d-inline">
                         <button class="btn btn-danger">&#x10102;</button>
-
                 </form>
                 <li class="list-group-item rounded-3 flex-direction-row flex-fill me-3" id="task0">
                     <p class="d-inline text-decoration-line-through">{{todo['task']}}</p>
                 </li>
-                <form action="/edit" method="post">
-                    <button class="btn-secondary btn me-2">Edit</button>
-                </form>
                 <form action="/delete/{{loop.index0}}" method="post">
                     <button class="btn btn-danger" type="submit">Delete</button>
                 </form>

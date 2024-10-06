@@ -25,9 +25,14 @@ def add():
 
     return redirect(url_for("index", todos=todos))
 
-@app.route("/edit")
-def edit():
-    pass
+@app.route("/edit/<int:task_id>", methods=["GET", "POST"])
+def edit(task_id):
+    if request.method == "POST":
+        todos[task_id]['task'] = request.form['updated-task']
+
+        return redirect(url_for("index", todos=todos))
+
+    return render_template("edit.html", todo=todos[task_id], id=task_id)
 
 @app.route("/complete/<int:task_id>", methods=["POST"])
 def complete(task_id):

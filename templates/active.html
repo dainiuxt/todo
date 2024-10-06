@@ -7,13 +7,12 @@
         {%if not todo['done']%}
             <div class="list-group-item d-flex flex-row overflow-scroll">
                 <form action="/complete/{{loop.index0}}" method="post" class="d-inline">
-                        <button class="btn btn-success">&#x2714;</button>
-
+                    <button class="btn btn-success">&#x2714;</button>
                 </form>
                 <li class="list-group-item rounded-3 flex-direction-row flex-fill me-3" id="task0">
                     <p class="d-inline">{{todo['task']}}</p>
                 </li>
-                <form action="/edit" method="post">
+                <form action="/edit/" method="get">
                     <button class="btn-secondary btn me-2">Edit</button>
                 </form>
                 <form action="/delete/{{loop.index0}}" method="post">

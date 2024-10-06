@@ -20,9 +20,11 @@
                     <p class="d-inline">{{todo['task']}}</p>
                 {%endif%}
             </li>
-            <form action="/edit" method="post">
-                <button class="btn-secondary btn me-2">Edit</button>
-            </form>
+            {%if not todo['done']%}
+                <form action="/edit/{{loop.index0}}" method="get">
+                    <button class="btn-secondary btn me-2">Edit</button>
+                </form>
+            {%endif%}
             <form action="/delete/{{loop.index0}}" method="post">
                 <button class="btn btn-danger" type="submit">Delete</button>
             </form>
