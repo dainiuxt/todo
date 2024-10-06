@@ -38,18 +38,23 @@
                             </ul>
                         </nav>
                         <!-- Tasks -->
-                         <form action="#">
                             <ul class="list-group gap-2" id="tasks">
                                 {% for todo in todos %}                            
-                                    <li class="list-group-item rounded-3" id="task0">
-                                        <input type="checkbox" class="me-2"  name="done-task" id="task0-cb">
-                                        <p class="d-inline">{{todo['task']}}</p>
-                                    </li>
+                                    <div class="list-group-item d-flex flex-row overflow-scroll">
+                                            <li class="list-group-item rounded-3 flex-direction-row flex-fill me-3" id="task0">
+                                                <input type="checkbox" class="me-2"  name="done-task" id="task0-cb">
+                                                <p class="d-inline ">{{todo['task']}}</p>
+                                            </li>
+                                            <form action="/edit" method="post">
+                                                <button class="btn-secondary btn me-2">Edit</button>
+                                            </form>
+                                            <form action="/delete/{{loop.index0}}" method="post">
+                                                <button class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </div>
                                 {%endfor%}
                             </ul>
-                         </form>
                     </div>
-                    
                 </div>
             </div>
         </section>
