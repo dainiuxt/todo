@@ -3,9 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../static/styles.css">
     <title>Todo</title>
 </head>
 <body>
+    <main class="vh-100 bg-info">
+
+        <section class="container h-100">
+            <div class="row d-flex align-items-center h-100">
+                <div class="col">
+                    <div class="card p-5 bg-dark">
+                        <!-- Add task -->
+                                    
+                        <form action="/add" class="input-group justify-content-between gap-2" id="add-task" method="post">
+                            <input type="text" placeholder="New task..." class="flex-fill rounded-2 ps-2" id="task-text" name="task">
+                            <input type="submit" value="Add" class="btn btn-info ml-2 rounded-2" id="new-task-button">
+                        </form>
+    
+                        <nav class="mt-3 mb-3 bg-dark">
+                            <!-- Task tabs -->
+                            <ul class="nav text-uppercase nav-tabs" id="select-tab">
+                                <li class="nav-item">
+                                    <a class="nav-link border text-primary px-4 py-2 active" href="#">All</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white-50 px-4 py-2" href="#">Active</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white-50 px-4 py-2" href="#">Completed</a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!-- Tasks -->
+                         <form action="#">
+                            <ul class="list-group gap-2" id="tasks">
+                                {% for todo in todos %}                            
+                                    <li class="list-group-item rounded-3" id="task0">
+                                        <input type="checkbox" class="me-2"  name="done-task" id="task0-cb">
+                                        <p class="d-inline">{{todo['task']}}</p>
+                                    </li>
+                                {%endfor%}
+                            </ul>
+                         </form>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
