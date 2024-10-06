@@ -6,8 +6,11 @@
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <script src="../static/script.js" defer></script>
+
     <link rel="stylesheet" href="../static/styles.css">
-    <title>Todo</title>
+    <title>  {% block title %} {% endblock %} - Todo</title>
 </head>
 <body>
     <main class="vh-100 bg-info">
@@ -27,43 +30,20 @@
                             <!-- Task tabs -->
                             <ul class="nav text-uppercase nav-tabs" id="select-tab">
                                 <li class="nav-item">
-                                    <a class="nav-link border text-primary px-4 py-2 active" href="url_for('index')">All</a>
+                                    <a class="nav-link text-white-50 px-4 py-2" href="{{url_for('index')}}" id="all">All</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-white-50 px-4 py-2" href="{{ url_for('active') }}">Active</a>
+                                    <a class="nav-link text-white-50 px-4 py-2" href="{{ url_for('active') }}" id="active">Active</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-white-50 px-4 py-2" href="{{ url_for('completed') }}">Completed</a>
+                                    <a class="nav-link text-white-50 px-4 py-2" href="{{ url_for('completed') }}" id="completed">Completed</a>
                                 </li>
                             </ul>
                         </nav>
                         <!-- Tasks -->
                             <ul class="list-group gap-2" id="tasks">
-                                {% for todo in todos %}                            
-                                    <div class="list-group-item d-flex flex-row overflow-scroll">
-                                        <form action="/complete/{{loop.index0}}" method="post" class="d-inline">
-                                            {%if todo['done']%}
-                                                <button class="btn btn-danger">&#x10102;</button>
-                                            {%else%}
-                                                <button class="btn btn-success">&#x2714;</button>
-                                            {%endif%}
-
-                                        </form>
-                                        <li class="list-group-item rounded-3 flex-direction-row flex-fill me-3" id="task0">
-                                            {%if todo['done']%}
-                                                <p class="d-inline text-decoration-line-through">{{todo['task']}}</p>
-                                            {%else%}
-                                                <p class="d-inline">{{todo['task']}}</p>
-                                            {%endif%}
-                                        </li>
-                                        <form action="/edit" method="post">
-                                            <button class="btn-secondary btn me-2">Edit</button>
-                                        </form>
-                                        <form action="/delete/{{loop.index0}}" method="post">
-                                            <button class="btn btn-danger" type="submit">Delete</button>
-                                        </form>
-                                    </div>
-                                {%endfor%}
+                                {% block task_list %}                            
+                                {% endblock %}
                             </ul>
                     </div>
                 </div>

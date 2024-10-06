@@ -6,17 +6,17 @@ todos = [{"task": "take out the trash", "done": False}]
 
 @app.route("/")
 def index():
-    return render_template("layout.html", todos=todos)
+    return render_template("all.html", todos=todos)
 
 # TODO
 @app.route("/active")
 def active():
-    return redirect(url_for("index", todos=todos))
+    return render_template("active.html", todos=todos)
 
 # TODO
 @app.route("/completed")
 def completed():
-    return redirect(url_for("index", todos=todos))
+    return render_template("completed.html", todos=todos)
 
 @app.route("/add", methods=["POST"])
 def add():
