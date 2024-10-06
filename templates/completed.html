@@ -2,6 +2,19 @@
 
 {%block title%} Active tasks {%endblock%}
 
+
+{% block tabs %}
+    <li class="nav-item">
+        <a class="nav-link text-white-50 px-4 py-2" href="{{url_for('index')}}" id="all">All</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white-50 px-4 py-2" href="{{ url_for('active') }}" id="active">Active</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-primary border px-4 py-2" href="{{ url_for('completed') }}" id="completed">Completed</a>
+    </li>
+{% endblock %}
+
 {%block task_list %}
     {% for todo in todos %}                            
         {%if todo['done']%}
