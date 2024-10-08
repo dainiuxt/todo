@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template, url_for,redirect
 from sqlalchemy import MetaData
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -14,11 +14,12 @@ convention = {
     "pk": "pk_%(table_name)s"
 }
 
-metadata = MetaData(naming_convention=convention)
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app, metadata=metadata)
+
+metadata = MetaData(naming_convention=convention)
 ma = Marshmallow(app)
 migrate = Migrate(app, db, render_as_batch=True)
 
@@ -75,11 +76,58 @@ task_schema = TaskSchema()
 tasks_schema = TaskSchema(many=True)
 
 
-@app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
-    # čia galima renderinti login/create user
+todos = [{"task": "take out the trash", "done": False}]
 
+# All tasks
+@app.route("/")
+def index():
+    return render_template("all.html", todos=todos)
+
+# Active tasks
+@app.route("/active")
+def active():
+    return render_template("active.html", todos=todos)
+
+# Completed tasks
+@app.route("/completed")
+def completed():
+    return render_template("completed.html", todos=todos)
+
+# Add task
+@app.route("/add", methods=["POST"])
+def add():
+    task = request.form['task']
+    todos.append({"task": task, "done": False})
+
+    return redirect(url_for("index", todos=todos))
+
+# Edit task
+@app.route("/edit/<int:task_id>", methods=["GET", "POST"])
+def edit(task_id):
+    if request.method == "POST":
+        todos[task_id]['task'] = request.form['updated-task']
+
+        return redirect(url_for("index", todos=todos))
+
+    return render_template("edit.html", todo=todos[task_id], id=task_id)
+
+# Mark as completed
+@app.route("/complete/<int:task_id>", methods=["POST"])
+def complete(task_id):
+    if request.method == "POST":
+        if not todos[task_id]['done']:
+            todos[task_id]['done'] = True
+        else:
+            todos[task_id]['done'] = False
+
+    return redirect(url_for("index", todos=todos))
+
+# Del task
+@app.route("/delete/<int:task_id>", methods=["POST"])
+def delete(task_id):
+    del todos[task_id]
+
+    return redirect(url_for("index", todos=todos))
 
 # create a user
 @app.route("/create_user", methods=["POST"])
@@ -193,3 +241,8 @@ def complete_task(id, user_id):
 
     db.session.commit()
     return task_schema.jsonify(task)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
+

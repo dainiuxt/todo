@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{%block title%} Active tasks {%endblock%}
+
+
+{% block tabs %}
+    <li class="nav-item">
+        <a class="nav-link text-white-50 px-4 py-2" href="{{url_for('index')}}" id="all">All</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white-50 px-4 py-2" href="{{ url_for('active') }}" id="active">Active</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-primary border px-4 py-2" href="{{ url_for('completed') }}" id="completed">Completed</a>
+    </li>
+{% endblock %}
+
+{%block task_list %}
+    {% for todo in todos %}                            
+        {%if todo['done']%}
+            <div class="list-group-item d-flex flex-row overflow-scroll">
+                <form action="/complete/{{loop.index0}}" method="post" class="d-inline">
+                        <button class="btn btn-danger">&#x10102;</button>
+                </form>
+                <li class="list-group-item rounded-3 flex-direction-row flex-fill me-3" id="task0">
+                    <p class="d-inline text-decoration-line-through">{{todo['task']}}</p>
+                </li>
+                <form action="/delete/{{loop.index0}}" method="post">
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
+            </div>
+        {%endif%}
+    {%endfor%}
+{% endblock %}

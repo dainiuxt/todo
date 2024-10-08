@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{%block title%} All tasks {%endblock%}
+
+{% block tabs %}
+    <li class="nav-item">
+        <a class="nav-link px-4 py-2 text-primary border" href="{{url_for('index')}}" id="all">All</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white-50 px-4 py-2" href="{{ url_for('active') }}" id="active">Active</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white-50 px-4 py-2" href="{{ url_for('completed') }}" id="completed">Completed</a>
+    </li>
+{% endblock %}
+
+{%block task_list %}
+    {% for todo in todos %}                            
+        <div class="list-group-item d-flex flex-row overflow-scroll">
+            <form action="/complete/{{loop.index0}}" method="post" class="d-inline">
+                {%if todo['done']%}
+                    <button class="btn btn-danger">&#x10102;</button>
+                {%else%}
+                    <button class="btn btn-success">&#x2714;</button>
+                {%endif%}
+
+            </form>
+            <li class="list-group-item rounded-3 flex-direction-row flex-fill me-3" id="task0">
+                {%if todo['done']%}
+                    <p class="d-inline text-decoration-line-through">{{todo['task']}}</p>
+                {%else%}
+                    <p class="d-inline">{{todo['task']}}</p>
+                {%endif%}
+            </li>
+            {%if not todo['done']%}
+                <form action="/edit/{{loop.index0}}" method="get">
+                    <button class="btn-secondary btn me-2">Edit</button>
+                </form>
+            {%endif%}
+            <form action="/delete/{{loop.index0}}" method="post">
+                <button class="btn btn-danger" type="submit">Delete</button>
+            </form>
+        </div>
+    {%endfor%}
+{% endblock %}
