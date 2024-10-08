@@ -1,7 +1,10 @@
 # todo
 
-1. Refactor app (separate models, functions from main app).
-2. Implement Auth and verification.
+1. Modularize;
+2. Connect frontend endpoints to DB;
+3. Add login/register opt;
+4. Document;
+5. Implement Auth and verification.
 
 ### Data for Postman
 
