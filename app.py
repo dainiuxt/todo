@@ -134,13 +134,24 @@ def delete(task_id):
 
     return redirect(url_for("index", todos=todos))
 
-# Register user
+# Register
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        pass
-    
-    return render_template("register.html")
+        username = request.form["username"]
+        password = request.form["password"]
+        c_password = request.form["password-confirmation"]
+
+        print(username, password, c_password)
+
+        if not(username and password and c_password):
+            return render_template("register.html", error=True, error_message="You must enter username and password")
+        elif password != c_password:
+            return render_template("register.html", error=True, error_message="Passwords don't match")
+
+        return render_template("register.html", success=True, message="Your register has been successful!")
+
+    return render_template("register.html", error=False)
 
 # Login
 @app.route("/login", methods=["GET", "POST"])
