@@ -135,6 +135,7 @@ def delete(task_id):
     return redirect(url_for("index", todos=todos))
 
 # Register
+#TODO ADD PASSWORD HASH
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -142,10 +143,10 @@ def register():
         password = request.form["password"]
         c_password = request.form["password-confirmation"]
 
-        print(username, password, c_password)
-
+        # No input was provided
         if not(username and password and c_password):
             return render_template("register.html", error=True, error_message="You must enter username and password")
+        # Passwords dont match
         elif password != c_password:
             return render_template("register.html", error=True, error_message="Passwords don't match")
 
