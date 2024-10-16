@@ -6,7 +6,6 @@ from flask_migrate import Migrate
 from flask_marshmallow import Marshmallow
 from datetime import datetime
 
-import hash
 from hash import hash_password, get_salt, check_password
 
 convention = {
@@ -29,28 +28,24 @@ migrate = Migrate(app, db, render_as_batch=True)
 # seeder = FlaskSeeder()
 # seeder.init_app(app, db)
 
-
 class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), unique=True)
+    username = db.Column(db.String(255), unique=True)
     password = db.Column(db.String(255))
-    name = db.Column(db.String(50))
+    salt = db.Column(db.String(255))
+    # name = db.Column(db.String(50))
 
-    def __init__(self, username, password, name):
+    def __init__(self, username, password, salt):
         self.username = username
         self.password = password
-        self.name = name
+        self.salt = salt
+        # self.name = name
 
 
 class UserSchema(ma.Schema):
     class Meta:
-        fields = ("id", "username", "password", "name")
-
-
-user_schema = UserSchema()
-users_schema = UserSchema(many=True)
-
+        fields = ("id", "username", "password", "salt")
 
 class Task(db.Model):
     __tablename__ = "tasks"
@@ -74,6 +69,9 @@ class TaskSchema(ma.Schema):
     class Meta:
         fields = ("id", "user_id", "created", "content", "completed")
 
+
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
 
 task_schema = TaskSchema()
 tasks_schema = TaskSchema(many=True)
@@ -142,6 +140,7 @@ def delete(task_id):
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
+        # Get info from form
         username = request.form["username"]
         password = request.form["password"]
         confirm_password = request.form["password-confirmation"]
@@ -155,11 +154,11 @@ def register():
         hashed_pw = hash_password(password, salt)
         hashed_confirm_pw = hash_password(confirm_password, salt)
         
-        
         # Passwords dont match
         if not check_password(hashed_pw, hashed_confirm_pw):
             return render_template("register.html", error=True, error_message="Passwords don't match")
-
+       
+       # Successful registry
         return render_template("register.html", success=True, message="You successfuly registered!")
 
     return render_template("register.html", error=False)
