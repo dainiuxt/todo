@@ -6,6 +6,9 @@ from flask_migrate import Migrate
 from flask_marshmallow import Marshmallow
 from datetime import datetime
 
+import hash
+from hash import hash_password, get_salt, check_password
+
 convention = {
     "ix": 'ix_%(column_0_label)s',
     "uq": "uq_%(table_name)s_%(column_0_name)s",
@@ -141,16 +144,23 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        c_password = request.form["password-confirmation"]
-
-        # No input was provided
-        if not(username and password and c_password):
+        confirm_password = request.form["password-confirmation"]
+        
+        # No input was provided -> Exit
+        if not(username and password and confirm_password):
             return render_template("register.html", error=True, error_message="You must enter username and password")
+        
+        # Hash
+        salt = get_salt()
+        hashed_pw = hash_password(password, salt)
+        hashed_confirm_pw = hash_password(confirm_password, salt)
+        
+        
         # Passwords dont match
-        elif password != c_password:
+        if not check_password(hashed_pw, hashed_confirm_pw):
             return render_template("register.html", error=True, error_message="Passwords don't match")
 
-        return render_template("register.html", success=True, message="Your register has been successful!")
+        return render_template("register.html", success=True, message="You successfuly registered!")
 
     return render_template("register.html", error=False)
 
