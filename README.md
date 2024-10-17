@@ -5,6 +5,7 @@
 3. Add login/register opt;
 4. Document;
 5. Implement Auth and verification.
+6. Fix layouts (layout -> task page layout -> edit layout (?))
 
 ### Data for Postman
 

@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %} Edit task {% endblock %}
+
+{% block content %}
+    <ul class="list-group gap-2" id="tasks">
+        <div clas="d-flex flex-row">
+            <form action="/edit/{{id}}" method="post" class="input-group justify-content-between">            
+                <input type="text" class="d-inline flex-fill p-1" value="{{todo['task']}}" name="updated-task">
+                <button class="btn btn-success">Update</button>
+            </form>
+        </div>
+    </ul>
+{% endblock %}
