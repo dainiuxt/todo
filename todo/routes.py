@@ -1,6 +1,10 @@
-from flask import render_template, redirect, request, url_for
+from flask import render_template, redirect, request, url_for, flash
 
+# Used for hashing passwords and checking if correct
 from todo.helpers.hash.hash import get_salt, hash_password, check_password
+
+# Render forms quickly and get additional validation from wtforms
+from .forms import RegisterForm, LoginForm
 
 todos = [{"task": "take out the trash", "done": False}]
 
@@ -59,34 +63,38 @@ def register_routes(app, db):
     # Register
     @app.route("/register", methods=["GET", "POST"])
     def register():
-        if request.method == "POST":
-            # Get info from form
-            username = request.form["username"]
-            password = request.form["password"]
-            confirm_password = request.form["password-confirmation"]
-            
-            # No input was provided -> Exit
-            if not(username and password and confirm_password):
-                return render_template("register.html", error=True, error_message="You must enter username and password")
-            
-            # Hash
-            salt = get_salt()
-            hashed_pw = hash_password(password, salt)
-            hashed_confirm_pw = hash_password(confirm_password, salt)
-            
-            # Passwords dont match
-            if not check_password(hashed_pw, hashed_confirm_pw):
-                return render_template("register.html", error=True, error_message="Passwords don't match")
-        
-        # Successful registry
-            return render_template("register.html", success=True, message="You successfuly registered!")
+        form = RegisterForm()
 
-        return render_template("register.html", error=False)
+        # Means that request was POST and form is valid
+        if form.validate_on_submit():
+            username = form.username.data
+            password = form.password.data
+
+            # Hash to protect password
+            # Salt so figuring out hash function is harder
+            hashed_pw = hash_password(password, get_salt())
+
+            # check if user doesnt already exist
+
+            # Successful registry
+            flash("You successfuly registered!")
+            return render_template("register.html", form=form)
+
+        return render_template("register.html", error=False, form=form)
 
     # Login
     @app.route("/login", methods=["GET", "POST"])
     def login():
-        if request.method == "POST":
-            pass
+        form = LoginForm()
+
+        # Means that request was POST and form is valid
+        if form.validate_on_submit():
+            username = form.username.data
+            password = form.password.data
+
+            # check if correct password and user exists
+
+            # Successful login
+            return redirect(url_for('index'))
         
-        return render_template("login.html")
+        return render_template("login.html", form=form)

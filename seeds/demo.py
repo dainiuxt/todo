@@ -1,5 +1,5 @@
 from flask_seeder import Faker, generator
-from app import db, User, Task
+from todo.app import db, User, Task
 
 
 # Create a new Faker and tell it how to create User objects

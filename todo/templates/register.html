@@ -3,30 +3,44 @@
 {%block title %} Register {%endblock%}
 
 {%block content%}
-    <form action="/register" id="add-task" method="post">
+    <form action={{ url_for('register')}} id="add-task" method="post">
+        {{form.hidden_tag()}}
+
         <div class="mb-3">
-            <label for="username" class="form-label text-white">Username</label>
-            <input type="text" class="form-control" id="username" name="username">
+            {{form.username.label(class="form-label text-white")}}
+            {{form.username(class="flex-fill form-control")}}
         </div>
         <div class="mb-3">
-            <label for="password" class="form-label text-white">Password</label>
-            <input type="password" class="flex-fill form-control" id="password" name="password">
+            {{form.password.label(class="form-label text-white")}}
+            {{form.password(class="flex-fill form-control")}}
         </div>
         <div class="mb-4">
-            <label for="confirm-password" class="form-label text-white" >Confirm password</label>
-            <input type="password" class="flex-fill form-control" id="confirm-password" name="password-confirmation">
+            {{form.password_confirm.label(class="form-label text-white")}}
+            {{form.password_confirm(class="flex-fill form-control")}}
         </div>
-        {% if error %}
+
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <div class="bg-success mb-4 p-2 text-white">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+        
+        <!-- Render error message that comes from FORM validation error -->
+        {% if form.password_confirm.errors %}
             <div class="bg-danger mb-4 p-2 text-white">
-                {{ error_message }}
+                {{ form.errors['password_confirm'][0] }}
             </div>
-        {%elif success%}
+        {%endif%}
+        <!-- {%if form.errors %}
             <div class="bg-success mb-4 p-2 text-white">
                 {{ message }}
             </div>
-        {%endif%}
+        {%endif%} -->
+
         <div class="d-grid col-6 mx-auto">
-            <button class="btn btn-primary" type="submit" >Register</button>
+            {{ form.submit(class="btn btn-primary")}}
         </div>
     </form>
 {%endblock%}
