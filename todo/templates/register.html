@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{%block title %} Register {%endblock%}
+
+{%block content%}
+    <form action={{ url_for('register')}} id="add-task" method="post">
+        {{form.hidden_tag()}}
+
+        <div class="mb-3">
+            {{form.username.label(class="form-label text-white")}}
+            {{form.username(class="flex-fill form-control")}}
+        </div>
+        <div class="mb-3">
+            {{form.password.label(class="form-label text-white")}}
+            {{form.password(class="flex-fill form-control")}}
+        </div>
+        <div class="mb-4">
+            {{form.password_confirm.label(class="form-label text-white")}}
+            {{form.password_confirm(class="flex-fill form-control")}}
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <div class="bg-success mb-4 p-2 text-white">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+        
+        <!-- Render error message that comes from FORM validation error -->
+        {% if form.password_confirm.errors %}
+            <div class="bg-danger mb-4 p-2 text-white">
+                {{ form.errors['password_confirm'][0] }}
+            </div>
+        {%endif%}
+        <!-- {%if form.errors %}
+            <div class="bg-success mb-4 p-2 text-white">
+                {{ message }}
+            </div>
+        {%endif%} -->
+
+        <div class="d-grid col-6 mx-auto">
+            {{ form.submit(class="btn btn-primary")}}
+        </div>
+    </form>
+{%endblock%}

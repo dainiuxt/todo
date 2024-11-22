@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{%block title %} Login {%endblock%}
+
+{%block content%}
+    <form action={{ url_for('login')}} id="add-task" method="post">
+        {{form.hidden_tag()}}
+
+        <div class="mb-3">
+            {{form.username.label(class="form-label text-white")}}
+            {{form.username(class="flex-fill form-control")}}
+        </div>
+        <div class="mb-4">
+            {{form.password.label(class="form-label text-white")}}
+            {{form.password(class="flex-fill form-control")}}
+        </div>
+        
+        <!-- Render error messages that come from routes.py with `flash()` -->
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+            <div class="bg-danger mb-4 p-2 text-white">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endwith %}
+
+        <div class="d-grid col-6 mx-auto">
+            {{form.submit(class="btn btn-primary")}}
+        </div>    
+    </form>
+{%endblock%}
